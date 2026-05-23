@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUPHORIA | Real Estate Vault Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- DYNAMIC GLOBAL AND PROPERTY TAB MODAL SYSTEM (your original styles) --- */
+        .info-modal, .property-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        }
+        .info-modal.active, .property-modal.active {
+            opacity: 1; pointer-events: auto;
+        }
+        .info-modal-content, .property-modal-content {
+            background: #111111;
+            border: 1px solid #d4af37;
+            width: 90%; max-width: 800px;
+            max-height: 90vh; overflow-y: auto;
+            padding: 35px; position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            border-radius: 4px;
+        }
+        .info-modal-close, .property-modal-close {
+            position: absolute; top: 15px; right: 20px;
+            color: #ffffff; font-size: 30px; cursor: pointer; transition: color 0.3s;
+            z-index: 10;
+        }
+        .info-modal-close:hover, .property-modal-close:hover { color: #d4af37; }
+        
+        .info-modal h3 {
+            font-family: 'Cinzel', serif; color: #d4af37;
+            font-size: 1.8rem; margin-bottom: 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 10px;
+        }
+        .info-modal p { font-size: 0.95rem; line-height: 1.6; color: #cccccc; margin-bottom: 15px; }
+        .info-modal li { font-size: 0.9rem; color: #bbbbbb; margin-bottom: 8px; list-style-type: square; }
+
+        /* --- STYLISH MULTI-ANGLE MEDIA TABS (your original) --- */
+        .modal-tabs { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid #222; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn {
+            background: #1c1c1c; border: 1px solid #333; color: #aaa;
+            padding: 8px 14px; font-family: 'Montserrat', sans-serif; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .tab-btn:hover, .tab-btn.active { background: #d4af37; color: #000; border-color: #d4af37; }
+        .tab-content { display: none; width: 100%; height: 420px; background: #000; }
+        .tab-content.active { display: block; }
+        .tab-content img { width: 100%; height: 100%; object-fit: cover; }
+        .tab-content video { width: 100%; height: 100%; object-fit: cover; }
+
+        .modal-details h3 { font-family: 'Cinzel', serif; color: #d4af37; margin: 15px 0 5px 0; font-size: 1.6rem; }
+        .modal-details p { color: #ccc; font-size: 0.95rem; line-height: 1.5; margin-bottom: 15px; }
+
+        /* Custom scrollbar alignment */
+        .info-modal-content::-webkit-scrollbar, .property-modal-content::-webkit-scrollbar { width: 6px; }
+        .info-modal-content::-webkit-scrollbar-track, .property-modal-content::-webkit-scrollbar-track { background: #111; }
+        .info-modal-content::-webkit-scrollbar-thumb, .property-modal-content::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 3px; }
+
+        /* --- NEW HERO SLIDESHOW (replaces static hero) --- */
+        .hero-slideshow {
+            position: relative;
+            width: 100%;
+            height: 85vh;
+            min-height: 550px;
+            overflow: hidden;
+        }
+        .hero-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .hero-slide.active {
+            opacity: 1;
+        }
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 2;
+        }
+        .hero-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 3;
+            width: 90%;
+            max-width: 800px;
+        }
+        .hero-text h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            color: #d4af37;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .hero-text p {
+            font-size: 1.2rem;
+            color: #fff;
+            letter-spacing: 2px;
+            font-weight: 300;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.5);
+        }
+        .hero-slogan {
+            font-size: 1rem;
+            color: #d4af37;
+            margin-top: 20px;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+        @media (max-width: 768px) {
+            .hero-slideshow { height: 60vh; min-height: 400px; }
+            .hero-text h1 { font-size: 2rem; }
+            .hero-text p { font-size: 0.9rem; }
+            .hero-slogan { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR (your original, unchanged) -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo-link">
+                <img src="logo.jpeg" alt="Euphoria Logo" class="nav-logo" style="height: 130px !important; width: auto !important; max-height: none !important; object-fit: contain; display: block; image-rendering: -webkit-optimize-contrast;">
+            </a>
+        </div>
+         
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="real-estate.html" class="active">Real Estate</a></li>
+                <li><a href="timepieces.html">Timepieces</a></li>
+                <li><a href="aircrafts.html">Aircrafts</a></li>
+                <li><a href="roadsters.html">Exotic Roadsters</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-right">
+            <div class="search-bar">
+                <input type="text" placeholder="Search Estates...">
+                <button type="button">🔍</button>
+            </div>
+            <div class="auth-links">
+                <a href="#" class="sign-in-btn">Sign In / Sign Up</a>
+            </div>
+            <div class="hamburger-menu" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="side-menu" id="sideMenu">
+        <div class="close-menu" id="closeMenu">&times;</div>
+        <nav class="side-nav-links">
+            <a href="index.html">Home</a>
+            <a href="real-estate.html">Real Estate</a>
+            <a href="timepieces.html">Timepieces</a>
+            <a href="aircrafts.html">Aircrafts</a>
+            <a href="roadsters.html">Exotic Roadsters</a>
+            <hr style="border: 0; border-top: 1px solid rgba(255,215,0,0.2); margin: 15px 0;">
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact Us</a>
+            <a href="javascript:void(0)" onclick="openInfoModal('blogModal')">Luxury Blog</a>
+            <a href="javascript:void(0)" onclick="openInfoModal('marketModal')">Market News</a>
+        </nav>
+    </div>
+
+    <!-- HERO SECTION: SLIDESHOW WITH TEXT OVERLAY (8 internet images) -->
+    <div class="hero-slideshow" id="heroSlideshow">
+        <div class="hero-slide active">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80" alt="Luxury Estate">
+        </div>
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80" alt="Modern Villa">
+        </div>
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1600&q=80" alt="Waterfront Mansion">
+        </div>
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80" alt="Minimalist Pavilion">
+        </div>
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1600&q=80" alt="Alpine Manor">
+        </div>
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1600&q=80" alt="Mediterranean Estate">
+        </div>
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1600&q=80" alt="Contemporary Mansion">
+        </div>
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1600210491369-e753d80a41f3?auto=format&fit=crop&w=1600&q=80" alt="Luxury Penthouse">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-text">
+            <h1>THE REAL ESTATE VAULT</h1>
+            <p>Pre-Market Architectural Masterpieces</p>
+            <div class="hero-slogan">— Your home away from home —</div>
+        </div>
+    </div>
+
+    <!-- INVENTORY SECTION (your original cards, unchanged) -->
+    <section class="inventory-section">
+        <div class="section-header">
+            <h2>The Heritage Collection</h2>
+            <p class="slogan">Discrete residential listings for international collectors.</p>
+        </div>
+        
+        <div class="card-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; padding: 20px 0;">
+            
+            <div class="card">
+                <img src="images/real estate/house1.png" alt="The Azure Penthouse">
+                <div class="card-content">
+                    <h3>The Azure Penthouse</h3>
+                    <p>Bespoke structure with custom gold-plated detailing, private skydeck, and panoramic helipad space.</p>
+                    <button class="view-btn" style="width:100%; border:none; margin-top:10px;" onclick="openPropertyModal(1)">View Asset Vault</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="images/real estate/frontview.jpg" alt="Obsidian Waterfront Villa">
+                <div class="card-content">
+                    <h3>Obsidian Waterfront Villa</h3>
+                    <p>Subterranean glass docks, integrated 20-car thermal gallery, and multi-tier cascading infinity pools.</p>
+                    <button class="view-btn" style="width:100%; border:none; margin-top:10px;" onclick="openPropertyModal(2)">View Asset Vault</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80" alt="The Gilded Manor">
+                <div class="card-content">
+                    <h3>The Gilded Manor</h3>
+                    <p>Nestled across acres of deep secure forest. High-end automated AI infrastructure monitoring.</p>
+                    <button class="view-btn" style="width:100%; border:none; margin-top:10px;" onclick="openPropertyModal(3)">View Asset Vault</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" alt="Amethyst Sanctuary">
+                <div class="card-content">
+                    <h3>Amethyst Sanctuary</h3>
+                    <p>Symmetrical glass pavilions crafted directly around limestone natural cliffs. Fully isolated lines.</p>
+                    <button class="view-btn" style="width:100%; border:none; margin-top:10px;" onclick="openPropertyModal(4)">View Asset Vault</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=80" alt="The Luminary Pavilion">
+                <div class="card-content">
+                    <h3>The Luminary Pavilion</h3>
+                    <p>Designed with dynamic solar ceilings, marble internal courts, and climate-shielded structural wings.</p>
+                    <button class="view-btn" style="width:100%; border:none; margin-top:10px;" onclick="openPropertyModal(5)">View Asset Vault</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="Elysian Horizon Crown">
+                <div class="card-content">
+                    <h3>Elysian Horizon Crown</h3>
+                    <p>Tri-level penthouse suspended atop structural granite cores. Panoramic coastal perimeter layouts.</p>
+                    <button class="view-btn" style="width:100%; border:none; margin-top:10px;" onclick="openPropertyModal(6)">View Asset Vault</button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION (your original, unchanged) -->
+    <section id="contact" class="contact-section">
+        <div class="contact-header section-header">
+            <span class="eyebrow">Inquiry</span>
+            <h2>Global Concierge</h2>
+            <p class="slogan">Discrete. Professional. Instant.</p>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="info-block">
+                    <h3>The Private Vault</h3>
+                    <p>Francistown, Botswana</p>
+                    <p>Building 4, Digital City</p>
+                </div>
+                <div class="info-block">
+                    <h3>Direct Lines</h3>
+                    <p>Concierge: +267 71 000 000</p>
+                    <p>Email: private@euphoria.bw</p>
+                </div>
+            </div>
+            <div class="contact-form-wrapper">
+                <form class="luxury-form">
+                    <div class="form-group">
+                        <label>Identity</label>
+                        <input type="text" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Secure Email</label>
+                        <input type="email" placeholder="email@domain.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Asset Registration</label>
+                        <input type="text" id="targetAssetField" placeholder="Select 'View Asset Vault' above to bind target" readonly style="background: #1a1a1a; color: #d4af37;">
+                    </div>
+                    <div class="form-group">
+                        <label>Details</label>
+                        <textarea rows="4" placeholder="Specify scheduling parameters for direct private inspection slots..."></textarea>
+                    </div>
+                    <button type="submit" class="gold-submit-btn">Send Secure Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER (your original, unchanged) -->
+    <footer class="luxury-footer">
+        <div class="footer-container">
+            <div class="footer-col about-col">
+                <h2 class="footer-logo gold-text">EUPHORIA</h2>
+                <p>The premier global gateway for the world's most coveted assets. We curate excellence for those who demand the extraordinary.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Inventory</h3>
+                <ul>
+                    <li><a href="real-estate.html">Real Estate</a></li>
+                    <li><a href="timepieces.html">Timepieces</a></li>
+                    <li><a href="aircrafts.html">Aircrafts</a></li>
+                    <li><a href="roadsters.html">Exotic Roadsters</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>The Firm</h3>
+                <ul>
+                    <li><a href="#about">Our Story</a></li>
+                    <li><a href="#contact">Concierge</a></li>
+                    <li><a href="javascript:void(0)" onclick="openInfoModal('privacyModal')">Privacy Policy</a></li>
+                    <li><a href="javascript:void(0)" onclick="openInfoModal('termsModal')">Terms of Sale</a></li>
+                </ul>
+            </div>
+            <div class="footer-col newsletter-col">
+                <h3>The Private List</h3>
+                <p>Subscribe for exclusive access to off-market listings.</p>
+                <div class="footer-input">
+                    <input type="email" placeholder="Email Address">
+                    <button type="button">Join</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 EUPHORIA | Dreams Money Can Buy. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- MODALS (your original, unchanged) -->
+    <div class="property-modal" id="propertyModal" onclick="closePropertyModal(event)">
+        <div class="property-modal-content">
+            <span class="property-modal-close" onclick="closeAssetVault()">&times;</span>
+            
+            <div class="modal-tabs">
+                <button class="tab-btn active" onclick="switchAngle('front')">Front View</button>
+                <button class="tab-btn" onclick="switchAngle('interior')">Interior</button>
+                <button class="tab-btn" onclick="switchAngle('rooms')">Rooms</button>
+                <button class="tab-btn" onclick="switchAngle('kitchen')">Kitchen</button>
+                <button class="tab-btn" onclick="switchAngle('backyard')">Backyard</button>
+                <button class="tab-btn" onclick="switchAngle('video')">Video Preview</button>
+            </div>
+
+            <div class="modal-display-area">
+                <div id="angle-front" class="tab-content active"><img src="" alt="Front view render"></div>
+                <div id="angle-interior" class="tab-content"><img src="" alt="Interior render"></div>
+                <div id="angle-rooms" class="tab-content"><img src="" alt="Rooms configuration"></div>
+                <div id="angle-kitchen" class="tab-content"><img src="" alt="Kitchen spacing"></div>
+                <div id="angle-backyard" class="tab-content"><img src="" alt="Backyard layout"></div>
+                <div id="angle-video" class="tab-content">
+                    <video controls muted id="modalVideo">
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+
+            <div class="modal-details">
+                <h3 id="modalTitle">Bespoke Real Estate Asset</h3>
+                <p id="modalDescription">Verifying architectural integrity parameters configuration documentation...</p>
+                <button class="gold-submit-btn" style="margin: 0;" onclick="bindAssetToConcierge()">Bind to Concierge Request Form</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-modal" id="privacyModal" onclick="closeInfoModal(event, 'privacyModal')">
+        <div class="info-modal-content"><span class="info-modal-close" onclick="document.getElementById('privacyModal').classList.remove('active')">&times;</span>
+            <h3>Privacy Policy</h3><p>Sovereign data encryption architecture handles all custom communications routed through our global Concierge nodes securely.</p>
+        </div>
+    </div>
+    <div class="info-modal" id="termsModal" onclick="closeInfoModal(event, 'termsModal')">
+        <div class="info-modal-content"><span class="info-modal-close" onclick="document.getElementById('termsModal').classList.remove('active')">&times;</span>
+            <h3>Terms of Sale</h3><p>Pre-market inspections require verified biometric clearance profiles or established vault credentials prior to physical site access layout.</p>
+        </div>
+    </div>
+    <div class="info-modal" id="blogModal" onclick="closeInfoModal(event, 'blogModal')">
+        <div class="info-modal-content"><span class="info-modal-close" onclick="document.getElementById('blogModal').classList.remove('active')">&times;</span>
+            <h3>The Luxury Intelligence Blog</h3><p>Analyzing global architecture shift towards fully subterranean structures and autonomous smart home lines.</p>
+        </div>
+    </div>
+    <div class="info-modal" id="marketModal" onclick="closeInfoModal(event, 'marketModal')">
+        <div class="info-modal-content"><span class="info-modal-close" onclick="document.getElementById('marketModal').classList.remove('active')">&times;</span>
+            <h3>Premium Market Insights</h3><p>Prime off-market estate assets show strong growth margins across private coastal parameters this season.</p>
+        </div>
+    </div>
+
+    <script>
+        // --- AUTO SLIDESHOW FOR HERO (8 images, no arrows) ---
+        let heroIndex = 0;
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        const totalHero = heroSlides.length;
+        function nextHeroSlide() {
+            heroSlides[heroIndex].classList.remove('active');
+            heroIndex = (heroIndex + 1) % totalHero;
+            heroSlides[heroIndex].classList.add('active');
+        }
+        setInterval(nextHeroSlide, 5000);
+
+        // --- ALL YOUR ORIGINAL JAVASCRIPT (property modal, etc.) - unchanged ---
+        const realEstateData = {
+            1: {
+                title: "The Azure Penthouse",
+                description: "Bespoke structure with custom gold-plated detailing, private skydeck, and panoramic helipad space. Complete turn-key solution for enterprise owners.",
+                media: {
+                    front: "images/real estate/front1.png",
+                    interior: "images/real estate/interior.jpg",
+                    rooms: "images/real estate/rooms1.jpg",
+                    kitchen: "images/real estate/kitch.jpg",
+                    backyard: "images/real estate/back.png",
+                    video: "images/real estate/house1_preview.mp4"
+                }
+            },
+            2: {
+                title: "Obsidian Waterfront Villa",
+                description: "Subterranean glass docks, integrated 20-car thermal gallery, and multi-tier cascading infinity pools tailored for premium coastal properties.",
+                media: {
+                    front: "https://d9mwsw9655mj9.cloudfront.net/obsidian-villa-clifton-5c45c961307f1.jpg",
+                    interior: "https://capetownvillarentals.co.za/wp-content/uploads/2023/08/18-Obsidian-IMG_0640.jpg",
+                    rooms: "https://www.inresidence.villas/wp-content/uploads/2024/08/667d397299b2f5b8a4c3e051_Obsidian22.webp",
+                    kitchen: "https://pooleycabinets.com/wp-content/uploads/2014/07/cci-kitchen31-lg.jpg",
+                    backyard: "https://capetownvillarentals.co.za/wp-content/uploads/2023/08/13-Obsidian-IMG_0569.jpg",
+                    video: ""
+                }
+            },
+            3: {
+                title: "The Gilded Manor",
+                description: "Premium countryside estate configured with intelligent structural arrays, climate security shields, and separate dual staff wings.",
+                media: {
+                    front: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+                    interior: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
+                    rooms: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1200&q=80",
+                    kitchen: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80",
+                    backyard: "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1200&q=80",
+                    video: "https://www.w3schools.com/html/mov_bbb.mp4"
+                }
+            },
+            4: {
+                title: "Amethyst Sanctuary",
+                description: "Symmetrical structural pavilions optimizing natural ambient light vectors with floor-to-ceiling multi-layer reinforced thermal glass walls.",
+                media: {
+                    front: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
+                    interior: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80",
+                    rooms: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1200&q=80",
+                    kitchen: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80",
+                    backyard: "https://images.unsplash.com/photo-1531835551805-16d864c8d311?auto=format&fit=crop&w=1200&q=80",
+                    video: "https://www.w3schools.com/html/movie.mp4"
+                }
+            },
+            5: {
+                title: "The Luminary Pavilion",
+                description: "An elegant contemporary asset showcasing high structural ceilings, floating custom stairs, and custom water accents.",
+                media: {
+                    front: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+                    interior: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=1200&q=80",
+                    rooms: "https://st.hzcdn.com/simgs/pictures/living-rooms/pavilion-in-the-woods-baylis-architects-img~4b514f37078fea85_9-8401-1-1ea4c7c.jpg",
+                    kitchen: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1200&q=80",
+                    backyard: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80",
+                    video: "https://www.w3schools.com/html/mov_bbb.mp4"
+                }
+            },
+            6: {
+                title: "Elysian Horizon Crown",
+                description: "Superb architecture offering direct sea front access parameters coupled with smart environmental flow mapping layouts.",
+                media: {
+                    front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+                    interior: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80",
+                    rooms: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1200&q=80",
+                    kitchen: "https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?auto=format&fit=crop&w=1200&q=80",
+                    backyard: "https://images.unsplash.com/photo-1600210491369-e753d80a41f3?auto=format&fit=crop&w=1200&q=80",
+                    video: "https://www.w3schools.com/html/movie.mp4"
+                }
+            }
+        };
+
+        let currentActiveAsset = null;
+
+        function openPropertyModal(id) {
+            const data = realEstateData[id];
+            if (!data) return;
+
+            currentActiveAsset = data.title;
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('modalDescription').innerText = data.description;
+
+            document.querySelector('#angle-front img').src = data.media.front;
+            document.querySelector('#angle-interior img').src = data.media.interior;
+            document.querySelector('#angle-rooms img').src = data.media.rooms;
+            document.querySelector('#angle-kitchen img').src = data.media.kitchen;
+            document.querySelector('#angle-backyard img').src = data.media.backyard;
+            document.getElementById('modalVideo').src = data.media.video;
+
+            switchAngle('front');
+            document.getElementById('propertyModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function switchAngle(angleKey) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            if (angleKey !== 'video') {
+                document.getElementById('modalVideo').pause();
+            }
+
+            const targetBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.innerText.toLowerCase().includes(angleKey));
+            if(targetBtn) targetBtn.classList.add('active');
+            
+            const targetContent = document.getElementById(`angle-${angleKey}`);
+            if(targetContent) targetContent.classList.add('active');
+        }
+
+        function closeAssetVault() {
+            document.getElementById('modalVideo').pause();
+            document.getElementById('propertyModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function closePropertyModal(event) {
+            if (event.target === document.getElementById('propertyModal')) closeAssetVault();
+        }
+
+        function bindAssetToConcierge() {
+            if (currentActiveAsset) {
+                document.getElementById('targetAssetField').value = currentActiveAsset;
+                closeAssetVault();
+                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function openInfoModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeInfoModal(event, modalId) {
+            if (event.target === document.getElementById(modalId)) {
+                document.getElementById(modalId).classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

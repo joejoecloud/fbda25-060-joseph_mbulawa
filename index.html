@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUPHORIA | Dreams Money Can Buy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Additional popup modal styles */
+        .popup-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(12px);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+        }
+        .popup-content {
+            background: #111;
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            max-width: 550px;
+            width: 90%;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.5);
+            animation: fadeInUp 0.3s ease;
+        }
+        .popup-content h3 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            border-left: 3px solid #d4af37;
+            padding-left: 15px;
+        }
+        .popup-content p {
+            color: #ccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #aaa;
+            transition: 0.2s;
+        }
+        .popup-close:hover {
+            color: #d4af37;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Ensure footer links have pointer cursor */
+        .footer-col ul a, .side-nav-links a {
+            cursor: pointer;
+        }
+
+        /* Video slide specific styles */
+        .slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Ensure video slide has proper overlay */
+        .slide video + .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- WORKING 8-SLIDE SLIDESHOW - FIRST SLIDE IS VIDEO -->
+    <div class="slideshow-container" id="slideshowContainer">
+        <!-- SLIDE 1: VIDEO (Luxury Lifestyle Montage) -->
+        <div class="slide active">
+            <video id="heroVideo" autoplay muted playsinline loop>
+                <source src="images/roadsters/roadsters2.mp4" type="video/mp4">
+                <!-- Fallback image if video doesn't load -->
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80" alt="Luxury Estate">
+            </video>
+        </div>
+        
+        <!-- SLIDE 2: Real Estate Image -->
+        <div class="slide"><img src="images/homeslideshow/pic1.jpg" alt="Luxury Estate"></div>
+        
+        <!-- SLIDE 3: Modern Villa -->
+        <div class="slide"><img src="images/homeslideshow/pic2.jpg" alt="Modern Villa"></div>
+        
+        <!-- SLIDE 4: Elegant Timepiece -->
+        <div class="slide"><img src="images/homeslideshow/pic3.jpg" alt="Elegant Timepiece"></div>
+        
+        <!-- SLIDE 5: Luxury Watch Detail -->
+        <div class="slide"><img src="images/homeslideshow/pic4.jpg" alt="Luxury Watch Detail"></div>
+        
+        <!-- SLIDE 6: Private Jet Cabin -->
+        <div class="slide"><img src="images/homeslideshow/pic5.jpg" alt="Private Jet Cabin"></div>
+        
+        <!-- SLIDE 7: Luxury Helicopter -->
+        <div class="slide"><img src="images/homeslideshow/pic6.jpg" alt="Luxury Helicopter"></div>
+        
+        <!-- SLIDE 8: Exotic Roadster Supercar -->
+        <div class="slide"><img src="images/homeslideshow/pic7.jpg" alt="Exotic Roadster Supercar"></div>
+        
+        <!-- SLIDE 9: Luxury Sports Car -->
+        <div class="slide"><img src="images/homeslideshow/pic8.jpg" alt="Luxury Sports Car"></div>
+        
+        <div class="overlay"></div>
+    </div>
+
+    <!-- MAIN NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo-link">
+                <img src="logo.jpeg" alt="Euphoria Logo" class="nav-logo" style="height: 130px !important; width: auto !important; max-height: none !important; object-fit: contain; display: block; image-rendering: -webkit-optimize-contrast;">
+            </a>
+        </div>
+        
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="real-estate.html">Real Estate</a></li>
+                <li><a href="timepieces.html">Timepieces</a></li>
+                <li><a href="aircrafts.html">Aircrafts</a></li>
+                <li><a href="roadsters.html">Exotic Roadsters</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-right">
+            <div class="search-bar">
+                <input type="text" placeholder="Search Assets...">
+                <button type="button">🔍</button>
+            </div>
+            <div class="auth-links">
+                <a href="#" class="sign-in-btn">Sign In / Sign Up</a>
+            </div>
+            <div class="hamburger-menu" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE SIDE MENU -->
+    <div class="side-menu" id="sideMenu">
+        <div class="close-menu" id="closeMenu">&times;</div>
+        <nav class="side-nav-links">
+            <a href="index.html">Home</a>
+            <a href="real-estate.html">Real Estate</a>
+            <a href="timepieces.html">Timepieces</a>
+            <a href="aircrafts.html">Aircrafts</a>
+            <a href="roadsters.html">Exotic Roadsters</a>
+            <hr style="border: 0; border-top: 1px solid rgba(255,215,0,0.2); margin: 15px 0;">
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact Us</a>
+            <a href="#" class="popup-link" data-popup="luxury-blog">Luxury Blog</a>
+            <a href="#" class="popup-link" data-popup="market-news">Market News</a>
+        </nav>
+    </div>
+
+    <!-- HERO DISPLAY -->
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="gold-text">EUPHORIA</h1>
+            <p class="tagline gold-text-all">Dreams Money Can Buy</p>
+            <div class="hero-cta">
+                <a href="real-estate.html" class="cta-button">Explore the Collection</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- REAL ESTATE PREVIEW SECTION -->
+    <section id="real-estate" class="inventory-section">
+        <div class="section-header">
+            <h2>Real Estate</h2>
+            <p class="slogan">Your home away from home.</p>
+        </div>
+        <div class="card-container">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800" alt="Penthouse">
+                <div class="card-content">
+                    <h3>The Azure Penthouse</h3>
+                    <p>Exclusive 5-bedroom panoramic suite. Features gold-plated finishes and private helipad.</p>
+                    <a href="real-estate.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800" alt="Villa">
+                <div class="card-content">
+                    <h3>Obsidian Waterfront Villa</h3>
+                    <p>Mediterranean masterpiece featuring a 20-car underground gallery and private dock.</p>
+                    <a href="real-estate.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800" alt="Manor">
+                <div class="card-content">
+                    <h3>The Gilded Manor</h3>
+                    <p>Contemporary estate set on 50 acres of private forest. Full smart-home integration.</p>
+                    <a href="real-estate.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMEPIECES PREVIEW SECTION -->
+    <section id="timepieces" class="inventory-section">
+        <div class="section-header">
+            <h2>Timepieces</h2>
+            <p class="slogan">Pieces that do not just tell time but tell you how valuable your time is.</p>
+        </div>
+        <div class="card-container">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1545038110-400f683aa1de?w=600&auto=format&fit=crop&q=60" alt="Watch">
+                <div class="card-content">
+                    <h3>Celestial Tourbillon</h3>
+                    <p>Hand-crafted skeleton movement with diamond-encrusted bezel and 18k gold casing.</p>
+                    <a href="timepieces.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800" alt="Watch">
+                <div class="card-content">
+                    <h3>Royal Oak Custom</h3>
+                    <p>Rose gold finish with emerald markers. One of three existing units worldwide.</p>
+                    <a href="timepieces.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=800" alt="Watch">
+                <div class="card-content">
+                    <h3>Lumina Moonphase</h3>
+                    <p>Automatic movement with meteorite dial. Precision engineered for generations.</p>
+                    <a href="timepieces.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AIRCRAFTS PREVIEW SECTION -->
+    <section id="aircrafts" class="inventory-section">
+        <div class="section-header">
+            <h2>Aircrafts</h2>
+            <p class="slogan">Engineered for the Extraordinary.</p>
+        </div>
+        <div class="card-container">
+            <div class="card">
+                <img src="https://plus.unsplash.com/premium_photo-1682142182464-3be6161b3a42?w=600&auto=format&fit=crop&q=60" alt="Jet">
+                <div class="card-content">
+                    <h3>Stratosphere X-J</h3>
+                    <p>Long-range private jet with bespoke interior and zero-gravity seating.</p>
+                    <a href="aircrafts.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1569154941061-e231b4725ef1?auto=format&fit=crop&w=800" alt="Jet">
+                <div class="card-content">
+                    <h3>Falcon 9 Business</h3>
+                    <p>Designed for trans-continental travel with a private meeting suite.</p>
+                    <a href="aircrafts.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1702129835628-3de5237f9d02?w=600&auto=format&fit=crop&q=60" alt="Heli">
+                <div class="card-content">
+                    <h3>Golden Horizon Heli</h3>
+                    <p>The quietest executive helicopter in its class. Gold trim finish.</p>
+                    <a href="aircrafts.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXOTIC ROADSTERS PREVIEW SECTION -->
+    <section id="roadsters" class="inventory-section">
+        <div class="section-header">
+            <h2>Exotic Roadsters</h2>
+            <p class="slogan">Pure power meets luxury craftsmanship.</p>
+        </div>
+        <div class="card-container">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800" alt="Roadster">
+                <div class="card-content">
+                    <h3>Phantom Onyx Edition</h3>
+                    <p>Custom wide-body roadster. Carbon fiber finish with performance tuning.</p>
+                    <a href="roadsters.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800" alt="Supercar">
+                <div class="card-content">
+                    <h3>Stealth GT Carbon</h3>
+                    <p>Lightweight track beast. Street legal, featuring a titanium exhaust system.</p>
+                    <a href="roadsters.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800" alt="Supercar">
+                <div class="card-content">
+                    <h3>Venom V12 Roadster</h3>
+                    <p>Pure power meets luxury craftsmanship. Hand-stitched leather interiors.</p>
+                    <a href="roadsters.html" class="view-btn">Explore More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1630587148265-761cbd139043?w=600&auto=format&fit=crop&q=60" alt="Luxury Architecture">
+            </div>
+            <div class="about-content">
+                <span class="eyebrow">The Firm</span>
+                <h2 class="gold-text">Our Legacy</h2>
+                <p>Founded on the principles of exclusivity and architectural precision, <strong>Euphoria</strong> serves as the premier gateway to the world's most coveted assets. We do not just facilitate transactions; we curate lifestyles for those who demand the extraordinary.</p>
+                <p>Every property, timepiece, and vehicle in our collection undergoes a rigorous vetting process to ensure it meets the standard of <em>Dreams Money Can Buy</em>. Our global network ensures that even the most elusive assets are within your reach.</p>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-num gold-text">15+</span>
+                        <span class="stat-label">Years of Excellence</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num gold-text">400+</span>
+                        <span class="stat-label">Luxury Assets</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="contact-section">
+        <div class="contact-header section-header">
+            <span class="eyebrow">Inquiry</span>
+            <h2>Global Concierge</h2>
+            <p class="slogan">Discrete. Professional. Instant.</p>
+        </div>
+        
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="info-block">
+                    <h3>The Private Vault</h3>
+                    <p>Francistown, Botswana</p>
+                    <p>Building 4, Digital City</p>
+                </div>
+                <div class="info-block">
+                    <h3>Direct Lines</h3>
+                    <p>Concierge: +267 71 000 000</p>
+                    <p>Email: private@euphoria.bw</p>
+                </div>
+                <div class="info-block">
+                    <h3>Hours</h3>
+                    <p>Mon - Fri: 24/7 Service</p>
+                    <p>Sat - Sun: By Appointment Only</p>
+                </div>
+            </div>
+
+            <div class="contact-form-wrapper">
+                <form class="luxury-form">
+                    <div class="form-group">
+                        <label>Identity</label>
+                        <input type="text" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Secure Email</label>
+                        <input type="email" placeholder="email@domain.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Interest</label>
+                        <select>
+                            <option>Real Estate Portfolio</option>
+                            <option>Private Aviation</option>
+                            <option>Horology (Timepieces)</option>
+                            <option>Exotic Roadsters</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Details</label>
+                        <textarea rows="4" placeholder="How may we assist you?"></textarea>
+                    </div>
+                    <button type="submit" class="gold-submit-btn">Send Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER WITH POPUP LINKS -->
+    <footer class="luxury-footer">
+        <div class="footer-container">
+            <div class="footer-col about-col">
+                <h2 class="footer-logo gold-text">EUPHORIA</h2>
+                <p>The premier global gateway for the world's most coveted assets. We curate excellence for those who demand the extraordinary.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="twitter"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Inventory</h3>
+                <ul>
+                    <li><a href="real-estate.html">Real Estate</a></li>
+                    <li><a href="timepieces.html">Timepieces</a></li>
+                    <li><a href="aircrafts.html">Aircrafts</a></li>
+                    <li><a href="roadsters.html">Exotic Roadsters</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>The Firm</h3>
+                <ul>
+                    <li><a href="#about">Our Story</a></li>
+                    <li><a href="#contact">Concierge</a></li>
+                    <li><a href="#" class="popup-link" data-popup="privacy-policy">Privacy Policy</a></li>
+                    <li><a href="#" class="popup-link" data-popup="terms-of-sale">Terms of Sale</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col newsletter-col">
+                <h3>The Private List</h3>
+                <p>Subscribe for exclusive access to off-market listings.</p>
+                <div class="footer-input">
+                    <input type="email" placeholder="Email Address">
+                    <button type="button">Join</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 EUPHORIA | Dreams Money Can Buy. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- POPUP MODAL STRUCTURE -->
+    <div id="popupModal" class="popup-modal">
+        <div class="popup-content">
+            <span class="popup-close" id="popupClose">&times;</span>
+            <h3 id="popupTitle"></h3>
+            <div id="popupBody"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Slideshow with video first, then images
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let slideshowInterval;
+        let isVideoPlaying = true;
+
+        // Function to show a specific slide
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+            
+            // Handle video playback
+            const activeSlide = slides[index];
+            const video = activeSlide.querySelector('video');
+            
+            if (video) {
+                // If this is the video slide, play it
+                isVideoPlaying = true;
+                video.play().catch(e => console.log('Video autoplay prevented:', e));
+            } else {
+                // If not video slide, pause any video that might be playing
+                const allVideos = document.querySelectorAll('.slide video');
+                allVideos.forEach(vid => {
+                    vid.pause();
+                });
+                isVideoPlaying = false;
+            }
+        }
+
+        // Function to go to next slide
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            showSlide(currentIndex);
+        }
+
+        // Start the slideshow - video plays first for its duration, then moves to images
+        function startSlideshow() {
+            // Show first slide (video)
+            showSlide(0);
+            
+            // Get video duration or use 8 seconds as default
+            const firstVideo = slides[0]?.querySelector('video');
+            let videoDuration = 8000; // Default 8 seconds
+            
+            if (firstVideo) {
+                // When video metadata loads, get its duration
+                firstVideo.addEventListener('loadedmetadata', () => {
+                    videoDuration = Math.min(firstVideo.duration * 1000, 10000); // Max 10 seconds
+                    resetInterval(videoDuration);
+                });
+                
+                // If video ends, move to next slide
+                firstVideo.addEventListener('ended', () => {
+                    if (currentIndex === 0) {
+                        nextSlide();
+                        resetInterval(5000); // Switch to 5-second interval for images
+                    }
+                });
+            }
+            
+            // Set initial interval (will be adjusted after video duration is known)
+            resetInterval(videoDuration);
+        }
+        
+        function resetInterval(duration) {
+            if (slideshowInterval) clearInterval(slideshowInterval);
+            slideshowInterval = setInterval(() => {
+                // If current slide is video and video is still playing, don't auto-advance yet
+                const currentSlide = slides[currentIndex];
+                const currentVideo = currentSlide?.querySelector('video');
+                
+                if (currentVideo && !currentVideo.ended) {
+                    // Video still playing, wait
+                    return;
+                }
+                nextSlide();
+            }, duration);
+        }
+
+        // Ensure video plays when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            startSlideshow();
+            
+            // Make sure video starts playing
+            const video = document.querySelector('.slide.active video');
+            if (video) {
+                video.play().catch(e => console.log('Autoplay prevented:', e));
+            }
+        });
+
+        // Popup content dictionary
+        const popupContent = {
+            'privacy-policy': {
+                title: 'Privacy Policy',
+                body: '<p>At EUPHORIA, your privacy is paramount. This policy outlines how we collect, use, and protect your personal information when you interact with our digital vault. We employ 256-bit SSL encryption, never share your data with third parties without explicit consent, and you may request data deletion at any time by contacting our Data Protection Officer at privacy@euphoria.bw.</p><p>We collect only essential data for transaction facilitation and personalized service. Your browsing behavior on this site is anonymized and used solely to improve your luxury experience.</p><p style="margin-top:20px"><em>Last updated: May 2026</em></p>'
+            },
+            'terms-of-sale': {
+                title: 'Terms of Sale',
+                body: '<p>All acquisitions through EUPHORIA are governed by our exclusive membership agreement. Assets are sold "as inspected" with authentication guarantees. A non-refundable reservation deposit of 20% is required to initiate title transfer. Final settlement must occur within 14 business days via wire transfer or certified crypto-asset gateway.</p><p>EUPHORIA acts as a curator and intermediary; direct contracts are signed between buyer and asset holder. International buyers assume responsibility for import duties and compliance.</p><p style="margin-top:20px">For dispute resolution, arbitration shall take place under Botswana International Arbitration Centre rules.</p>'
+            },
+            'luxury-blog': {
+                title: 'Luxury Blog',
+                body: '<p>Welcome to the EUPHORIA editorial vault — exclusive insights into haute horology, private aviation, and architectural masterpieces. Our latest features include: "The Revival of Art Deco Estates", "Next‑Gen Hybrid Hypercars", and "Inside the World\'s Most Secure Private Hangars".</p><p>Subscribe to receive weekly drops of off‑market opportunities and curator interviews. Stay tuned for our upcoming podcast series featuring billion‑dollar collectors.</p><p style="margin-top:20px"><i class="fa-solid fa-newspaper"></i> To access full archives, please sign in to your concierge account.</p>'
+            },
+            'market-news': {
+                title: 'Market News',
+                body: '<p>Current market intelligence: The luxury asset index rose 7.2% this quarter. Limited‑edition timepieces saw record auction highs, while private jet inventory tightened by 15% year‑over‑year. Prime coastal real estate in the Mediterranean continues to appreciate, driven by ultra‑high‑net‑worth buyer demand.</p><p>EUPHORIA strategists forecast continued growth in collectible roadsters and vintage aviation. Contact your portfolio manager for confidential market reports and pre‑market listings.</p><p style="margin-top:20px"><i class="fa-solid fa-chart-line"></i> Next market update: June 15, 2026.</p>'
+            }
+        };
+
+        // Show popup function
+        function showPopup(type) {
+            const data = popupContent[type];
+            if (!data) return;
+            document.getElementById('popupTitle').innerText = data.title;
+            document.getElementById('popupBody').innerHTML = data.body;
+            document.getElementById('popupModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close popup
+        function closePopup() {
+            document.getElementById('popupModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Attach event listeners to all popup-trigger links
+        document.addEventListener('DOMContentLoaded', function() {
+            const popupLinks = document.querySelectorAll('.popup-link');
+            popupLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const type = this.getAttribute('data-popup');
+                    if (type && popupContent[type]) {
+                        showPopup(type);
+                    }
+                });
+            });
+            // Close modal when clicking the X or outside content
+            const modal = document.getElementById('popupModal');
+            const closeBtn = document.getElementById('popupClose');
+            closeBtn.addEventListener('click', closePopup);
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) closePopup();
+            });
+            // Also close with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    closePopup();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

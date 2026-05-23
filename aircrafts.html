@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUPHORIA | Private Aircraft Collection - Dreams Money Can Buy</title>
+    <link rel="icon" type="image/x-icon" href="favicon.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ========== RESET & BASE STYLES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        /* ========== NAVBAR STYLES ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-left .logo-link {
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            height: 130px !important;
+            width: auto !important;
+            max-height: none !important;
+            object-fit: contain;
+            display: block;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
+        .nav-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 400;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #d4af37;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 0.3rem 0.8rem;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            outline: none;
+            font-size: 0.85rem;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-bar button {
+            background: transparent;
+            border: none;
+            color: #d4af37;
+            cursor: pointer;
+        }
+
+        .sign-in-btn {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: opacity 0.3s;
+        }
+
+        .sign-in-btn:hover {
+            opacity: 0.8;
+        }
+
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger-menu span {
+            width: 25px;
+            height: 2px;
+            background: white;
+            transition: 0.3s;
+        }
+
+        /* ========== SIDE MENU ========== */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100%;
+            background: #0a0a0a;
+            border-left: 1px solid #d4af37;
+            z-index: 2000;
+            transition: right 0.3s ease;
+            padding: 2rem 1.5rem;
+        }
+
+        .side-menu.open {
+            right: 0;
+        }
+
+        .close-menu {
+            font-size: 2rem;
+            color: #d4af37;
+            cursor: pointer;
+            text-align: right;
+            margin-bottom: 2rem;
+        }
+
+        .side-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .side-nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            transition: color 0.3s;
+        }
+
+        .side-nav-links a:hover {
+            color: #d4af37;
+        }
+
+        /* ========== HERO SLIDESHOW WITH VIDEO FIRST ========== */
+        .hero-slideshow {
+            position: relative;
+            width: 100%;
+            height: 85vh;
+            min-height: 550px;
+            overflow: hidden;
+            margin-top: 130px;
+        }
+
+        .hero-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 2;
+        }
+
+        .hero-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 3;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .hero-text h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            color: #d4af37;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: #fff;
+            letter-spacing: 2px;
+            font-weight: 300;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.5);
+        }
+
+        .hero-slogan {
+            font-size: 1rem;
+            color: #d4af37;
+            margin-top: 20px;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 5%;
+        }
+
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s;
+            border-radius: 30px;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #d4af37;
+            color: #0a0a0a;
+        }
+
+        .results-count {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .aircraft-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .aircraft-card {
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .aircraft-card:hover {
+            transform: translateY(-5px);
+            border-color: #d4af37;
+        }
+
+        .aircraft-image {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .aircraft-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .aircraft-card:hover .aircraft-image img {
+            transform: scale(1.05);
+        }
+
+        .aircraft-details {
+            padding: 1.5rem;
+        }
+
+        .aircraft-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: #d4af37;
+            margin-bottom: 0.5rem;
+        }
+
+        .aircraft-category {
+            font-size: 0.7rem;
+            color: rgba(212, 175, 55, 0.7);
+            letter-spacing: 1px;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .aircraft-description {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+
+        .aircraft-specs {
+            display: flex;
+            gap: 0.8rem;
+            margin: 1rem 0;
+            padding: 0.8rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .spec {
+            flex: 1;
+            text-align: center;
+        }
+
+        .spec-label {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+        }
+
+        .spec-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #d4af37;
+        }
+
+        .aircraft-price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d4af37;
+            margin: 1rem 0;
+        }
+
+        .inquiry-btn {
+            width: 100%;
+            background: #d4af37;
+            color: #0a0a0a;
+            border: none;
+            padding: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            border-radius: 5px;
+        }
+
+        .inquiry-btn:hover {
+            opacity: 0.8;
+        }
+
+        .featured-section {
+            margin: 4rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(0, 0, 0, 0.8));
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .featured-section h2 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .featured-item {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 1.2rem;
+            border-radius: 10px;
+        }
+
+        /* ========== FOOTER STYLES ========== */
+        .luxury-footer {
+            background: #050505;
+            padding: 3rem 5% 1rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .gold-text {
+            color: #d4af37;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: opacity 0.3s;
+        }
+
+        .footer-col h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #d4af37;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-col ul li a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .footer-col ul li a:hover {
+            color: #d4af37;
+        }
+
+        .footer-input {
+            display: flex;
+            margin-top: 1rem;
+        }
+
+        .footer-input input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 0.5rem;
+            color: white;
+            outline: none;
+        }
+
+        .footer-input button {
+            background: #d4af37;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.75rem;
+        }
+
+        /* ========== POPUP MODAL ========== */
+        .popup-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(12px);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-content {
+            background: #111;
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            max-width: 550px;
+            width: 90%;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.5);
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .popup-content h3 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            border-left: 3px solid #d4af37;
+            padding-left: 15px;
+        }
+
+        .popup-content p {
+            color: #ccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #aaa;
+            transition: 0.2s;
+        }
+
+        .popup-close:hover {
+            color: #d4af37;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+            .hamburger-menu {
+                display: flex;
+            }
+            .search-bar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+            .hero-text p {
+                font-size: 0.9rem;
+            }
+            .hero-slogan {
+                font-size: 0.8rem;
+            }
+            .hero-slideshow {
+                height: 60vh;
+                min-height: 400px;
+            }
+            .aircraft-grid {
+                grid-template-columns: 1fr;
+            }
+            .filter-section {
+                flex-direction: column;
+            }
+            .sign-in-btn {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-logo {
+                height: 80px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo-link">
+                <img src="logo.jpeg" alt="Euphoria Logo" class="nav-logo">
+            </a>
+        </div>
+        
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="real-estate.html">Real Estate</a></li>
+                <li><a href="timepieces.html">Timepieces</a></li>
+                <li><a href="aircrafts.html" class="active">Aircrafts</a></li>
+                <li><a href="roadsters.html">Exotic Roadsters</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-right">
+            <div class="search-bar">
+                <input type="text" placeholder="Search Assets...">
+                <button type="button">🔍</button>
+            </div>
+            <div class="auth-links">
+                <a href="#" class="sign-in-btn">Sign In / Sign Up</a>
+            </div>
+            <div class="hamburger-menu" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== MOBILE SIDE MENU ========== -->
+    <div class="side-menu" id="sideMenu">
+        <div class="close-menu" id="closeMenu">&times;</div>
+        <nav class="side-nav-links">
+            <a href="index.html">Home</a>
+            <a href="real-estate.html">Real Estate</a>
+            <a href="timepieces.html">Timepieces</a>
+            <a href="aircrafts.html">Aircrafts</a>
+            <a href="roadsters.html">Exotic Roadsters</a>
+            <hr style="border: 0; border-top: 1px solid rgba(255,215,0,0.2); margin: 15px 0;">
+            <a href="index.html#about">About Us</a>
+            <a href="index.html#contact">Contact Us</a>
+            <a href="#" class="popup-link" data-popup="luxury-blog">Luxury Blog</a>
+            <a href="#" class="popup-link" data-popup="market-news">Market News</a>
+        </nav>
+    </div>
+
+    <!-- ========== HERO SLIDESHOW - VIDEO FIRST, THEN IMAGES ========== -->
+    <div class="hero-slideshow" id="heroSlideshow">
+        <!-- SLIDE 1: VIDEO (Luxury Aircraft Montage) -->
+        <div class="hero-slide active">
+            <video id="heroVideo" autoplay muted playsinline>
+                <source src="images/roadsters/air.mp4" type="video/mp4">
+                <!-- Fallback image if video doesn't load -->
+                <img src="https://images.unsplash.com/photo-1540962351504-eca99e2c1e9d?auto=format&fit=crop&w=1920&q=80" alt="Luxury Aircraft">
+            </video>
+        </div>
+        
+        <!-- SLIDE 2: Gulfstream G700 -->
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1540962351504-eca99e2c1e9d?auto=format&fit=crop&w=1920&q=80" alt="Gulfstream G700">
+        </div>
+        
+        <!-- SLIDE 3: Bombardier Global 7500 -->
+        <div class="hero-slide">
+            <img src="https://plus.unsplash.com/premium_photo-1682142182464-3be6161b3a42?auto=format&fit=crop&w=1920&q=80" alt="Bombardier Global 7500">
+        </div>
+        
+        <!-- SLIDE 4: Dassault Falcon 8X -->
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1520437358207-323b43b50729?auto=format&fit=crop&w=1920&q=80" alt="Dassault Falcon 8X">
+        </div>
+        
+        <!-- SLIDE 5: Embraer Phenom 300E -->
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1569154941061-e231b4725ef1?auto=format&fit=crop&w=1920&q=80" alt="Embraer Phenom 300E">
+        </div>
+        
+        <!-- SLIDE 6: Cessna Citation -->
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1542296332-2e4473faf563?auto=format&fit=crop&w=1920&q=80" alt="Cessna Citation">
+        </div>
+        
+        <!-- SLIDE 7: HondaJet -->
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1920&q=80" alt="HondaJet">
+        </div>
+        
+        <!-- SLIDE 8: AgustaWestland Helicopter -->
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1556388158-62ea7df7e6d2?auto=format&fit=crop&w=1920&q=80" alt="AgustaWestland Helicopter">
+        </div>
+        
+        <!-- SLIDE 9: Airbus H160 Helicopter -->
+        <div class="hero-slide">
+            <img src="https://images.unsplash.com/photo-1702129835628-3de5237f9d02?auto=format&fit=crop&w=1920&q=80" alt="Airbus H160">
+        </div>
+        
+        <div class="hero-overlay"></div>
+        <div class="hero-text">
+            <h1>PRIVATE AVIATION</h1>
+            <p>Engineered for the Extraordinary</p>
+            <div class="hero-slogan">— Where Performance Meets Luxury —</div>
+        </div>
+    </div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div class="main-container">
+        <div class="filter-section">
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">All Aircraft</button>
+                <button class="filter-btn" data-filter="heavy">Heavy Jets</button>
+                <button class="filter-btn" data-filter="light">Light Jets</button>
+                <button class="filter-btn" data-filter="helicopter">Helicopters</button>
+            </div>
+            <div class="results-count">
+                <span id="resultCount">9</span> Exceptional Aircraft Available
+            </div>
+        </div>
+
+        <div class="aircraft-grid" id="aircraftGrid">
+            <!-- 1. Gulfstream G700 - Heavy Jet -->
+            <div class="aircraft-card" data-category="heavy">
+                <div class="aircraft-image"><img src="https://assets.gulfstream.aero/thedotcom/images/aircraft/g700/d_g700_a_mkt_00177_PROD.jpg" alt="Gulfstream G700"></div>
+                <div class="aircraft-details">
+                    <h3 class="aircraft-title">GULFSTREAM G700</h3>
+                    <div class="aircraft-category">ULTRA-LONG-RANGE HEAVY JET</div>
+                    <p class="aircraft-description">The pinnacle of private aviation. Features the longest, widest, and tallest cabin in its class.</p>
+                    <div class="aircraft-specs">
+                        <div class="spec"><div class="spec-label">RANGE</div><div class="spec-value">7,500 NM</div></div>
+                        <div class="spec"><div class="spec-label">SPEED</div><div class="spec-value">Mach 0.925</div></div>
+                        <div class="spec"><div class="spec-label">PASSENGERS</div><div class="spec-value">19</div></div>
+                    </div>
+                    <div class="aircraft-price">$78,000,000</div>
+                    <button class="inquiry-btn" onclick="openInquiry('Gulfstream G700')">Request Private Viewing</button>
+                </div>
+            </div>
+
+            <!-- 2. Bombardier Global 7500 - Heavy Jet -->
+            <div class="aircraft-card" data-category="heavy">
+                <div class="aircraft-image"><img src="https://plus.unsplash.com/premium_photo-1682142182464-3be6161b3a42?auto=format&fit=crop&w=800&q=80" alt="Bombardier Global 7500"></div>
+                <div class="aircraft-details">
+                    <h3 class="aircraft-title">BOMBARDIER GLOBAL 7500</h3>
+                    <div class="aircraft-category">ULTRA-LONG-RANGE HEAVY JET</div>
+                    <p class="aircraft-description">Industry leader with four living spaces, full-size kitchen, and dedicated crew suite.</p>
+                    <div class="aircraft-specs">
+                        <div class="spec"><div class="spec-label">RANGE</div><div class="spec-value">7,700 NM</div></div>
+                        <div class="spec"><div class="spec-label">SPEED</div><div class="spec-value">Mach 0.925</div></div>
+                        <div class="spec"><div class="spec-label">PASSENGERS</div><div class="spec-value">19</div></div>
+                    </div>
+                    <div class="aircraft-price">$73,000,000</div>
+                    <button class="inquiry-btn" onclick="openInquiry('Bombardier Global 7500')">Request Private Viewing</button>
+                </div>
+            </div>
+
+            <!-- 3. Dassault Falcon 8X - Heavy Jet -->
+            <div class="aircraft-card" data-category="heavy">
+                <div class="aircraft-image"><img src="https://images.unsplash.com/photo-1520437358207-323b43b50729?auto=format&fit=crop&w=800&q=80" alt="Dassault Falcon 8X"></div>
+                <div class="aircraft-details">
+                    <h3 class="aircraft-title">DASSAULT FALCON 8X</h3>
+                    <div class="aircraft-category">ULTRA-LONG-RANGE HEAVY JET</div>
+                    <p class="aircraft-description">Ultimate French craftsmanship. Ultra-quiet cabin with award-winning interior.</p>
+                    <div class="aircraft-specs">
+                        <div class="spec"><div class="spec-label">RANGE</div><div class="spec-value">6,450 NM</div></div>
+                        <div class="spec"><div class="spec-label">SPEED</div><div class="spec-value">Mach 0.90</div></div>
+                        <div class="spec"><div class="spec-label">PASSENGERS</div><div class="spec-value">16</div></div>
+                    </div>
+                    <div class="aircraft-price">$65,000,000</div>
+                    <button class="inquiry-btn" onclick="openInquiry('Dassault Falcon 8X')">Request Private Viewing</button>
+                </div>
+            </div>
+
+            <!-- 4. Embraer Phenom 300E - Light Jet -->
+            <div class="aircraft-card" data-category="light">
+                <div class="aircraft-image"><img src="https://images.unsplash.com/photo-1569154941061-e231b4725ef1?auto=format&fit=crop&w=800&q=80" alt="Phenom 300E"></div>
+                <div class="aircraft-details">
+                    <h3 class="aircraft-title">EMBRAER PHENOM 300E</h3>
+                    <div class="aircraft-category">LIGHT BUSINESS JET</div>
+                    <p class="aircraft-description">World's best-selling light jet. Exceptional short-field performance.</p>
+                    <div class="aircraft-specs">
+                        <div class="spec"><div class="spec-label">RANGE</div><div class="spec-value">2,010 NM</div></div>
+                        <div class="spec"><div class="spec-label">SPEED</div><div class="spec-value">Mach 0.80</div></div>
+                        <div class="spec"><div class="spec-label">PASSENGERS</div><div class="spec-value">10</div></div>
+                    </div>
+                    <div class="aircraft-price">$9,500,000</div>
+                    <button class="inquiry-btn" onclick="openInquiry('Embraer Phenom 300E')">Request Private Viewing</button>
+                </div>
+            </div>
+
+            <!-- 5. Cessna Citation CJ4 - Light Jet -->
+            <div class="aircraft-card" data-category="light">
+                <div class="aircraft-image"><img src="https://images.unsplash.com/photo-1542296332-2e4473faf563?auto=format&fit=crop&w=800&q=80" alt="Cessna Citation CJ4"></div>
+                <div class="aircraft-details">
+                    <h3 class="aircraft-title">CESSNA CITATION CJ4 GEN2</h3>
+                    <div class="aircraft-category">LIGHT BUSINESS JET</div>
+                    <p class="aircraft-description">Perfect balance of performance and efficiency. Garmin G3000 avionics.</p>
+                    <div class="aircraft-specs">
+                        <div class="spec"><div class="spec-label">RANGE</div><div class="spec-value">2,165 NM</div></div>
+                        <div class="spec"><div class="spec-label">SPEED</div><div class="spec-value">Mach 0.78</div></div>
+                        <div class="spec"><div class="spec-label">PASSENGERS</div><div class="spec-value">9</div></div>
+                    </div>
+                    <div class="aircraft-price">$8,500,000</div>
+                    <button class="inquiry-btn" onclick="openInquiry('Cessna Citation CJ4')">Request Private Viewing</button>
+                </div>
+            </div>
+
+            <!-- 6. HondaJet Elite II - Light Jet -->
+            <div class="aircraft-card" data-category="light">
+                <div class="aircraft-image"><img src="https://tse3.mm.bing.net/th/id/OIP.iK_1R7oJSmaOyxPp_pPaBQHaDm?rs=1&pid=ImgDetMain&o=7&rm=3" alt="HondaJet Elite II"></div>
+                <div class="aircraft-details">
+                    <h3 class="aircraft-title">HONDAJET ELITE II</h3>
+                    <div class="aircraft-category">VERY LIGHT JET</div>
+                    <p class="aircraft-description">Innovative over-wing engine design. Most fuel-efficient in its class.</p>
+                    <div class="aircraft-specs">
+                        <div class="spec"><div class="spec-label">RANGE</div><div class="spec-value">1,547 NM</div></div>
+                        <div class="spec"><div class="spec-label">SPEED</div><div class="spec-value">422 kts</div></div>
+                        <div class="spec"><div class="spec-label">PASSENGERS</div><div class="spec-value">7</div></div>
+                    </div>
+                    <div class="aircraft-price">$5,400,000</div>
+                    <button class="inquiry-btn" onclick="openInquiry('HondaJet Elite II')">Request Private Viewing</button>
+                </div>
+            </div>
+
+            <!-- 7. AgustaWestland AW109 - Helicopter -->
+            <div class="aircraft-card" data-category="helicopter">
+                <div class="aircraft-image"><img src="https://tse2.mm.bing.net/th/id/OIP.3eQE0Kfi3xhajZ_OVpMeDwHaE8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="AgustaWestland AW109"></div>
+                <div class="aircraft-details">
+                    <h3 class="aircraft-title">AGUSTAWESTLAND AW109</h3>
+                    <div class="aircraft-category">LUXURY EXECUTIVE HELICOPTER</div>
+                    <p class="aircraft-description">World's most sophisticated light twin helicopter. VIP configuration.</p>
+                    <div class="aircraft-specs">
+                        <div class="spec"><div class="spec-label">RANGE</div><div class="spec-value">550 NM</div></div>
+                        <div class="spec"><div class="spec-label">SPEED</div><div class="spec-value">168 kts</div></div>
+                        <div class="spec"><div class="spec-label">PASSENGERS</div><div class="spec-value">6</div></div>
+                    </div>
+                    <div class="aircraft-price">$12,500,000</div>
+                    <button class="inquiry-btn" onclick="openInquiry('AgustaWestland AW109')">Request Private Viewing</button>
+                </div>
+            </div>
+
+            <!-- 8. Airbus H160 - Helicopter -->
+            <div class="aircraft-card" data-category="helicopter">
+                <div class="aircraft-image"><img src="https://images.unsplash.com/photo-1702129835628-3de5237f9d02?auto=format&fit=crop&w=800&q=80" alt="Airbus H160"></div>
+                <div class="aircraft-details">
+                    <h3 class="aircraft-title">AIRBUS H160</h3>
+                    <div class="aircraft-category">NEXT-GENERATION HELICOPTER</div>
+                    <p class="aircraft-description">Revolutionary Blue Edge blades for exceptional quietness.</p>
+                    <div class="aircraft-specs">
+                        <div class="spec"><div class="spec-label">RANGE</div><div class="spec-value">450 NM</div></div>
+                        <div class="spec"><div class="spec-label">SPEED</div><div class="spec-value">155 kts</div></div>
+                        <div class="spec"><div class="spec-label">PASSENGERS</div><div class="spec-value">8</div></div>
+                    </div>
+                    <div class="aircraft-price">$15,500,000</div>
+                    <button class="inquiry-btn" onclick="openInquiry('Airbus H160')">Request Private Viewing</button>
+                </div>
+            </div>
+
+            <!-- 9. Bell 505 Jet Ranger X - Helicopter -->
+            <div class="aircraft-card" data-category="helicopter">
+                <div class="aircraft-image"><img src="https://tse1.mm.bing.net/th/id/OIP.4YzDgTcmVRkXOUsZ3eYapQHaFl?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Bell 505"></div>
+                <div class="aircraft-details">
+                    <h3 class="aircraft-title">BELL 505 JET RANGER X</h3>
+                    <div class="aircraft-category">EXECUTIVE HELICOPTER</div>
+                    <p class="aircraft-description">Modern design with luxurious VIP configuration. Wide cabin.</p>
+                    <div class="aircraft-specs">
+                        <div class="spec"><div class="spec-label">RANGE</div><div class="spec-value">360 NM</div></div>
+                        <div class="spec"><div class="spec-label">SPEED</div><div class="spec-value">135 kts</div></div>
+                        <div class="spec"><div class="spec-label">PASSENGERS</div><div class="spec-value">5</div></div>
+                    </div>
+                    <div class="aircraft-price">$2,800,000</div>
+                    <button class="inquiry-btn" onclick="openInquiry('Bell 505 Jet Ranger X')">Request Private Viewing</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="featured-section">
+            <h2>Charter Management & Leasing</h2>
+            <p>Complete turnkey solutions for aircraft ownership, management, and charter services worldwide.</p>
+            <div class="featured-grid">
+                <div class="featured-item"><h3 style="color:#d4af37;">✈ Full Management</h3><p>Crew staffing, maintenance, hangarage, and operational support.</p></div>
+                <div class="featured-item"><h3 style="color:#d4af37;">📋 Charter Program</h3><p>Generate revenue when your aircraft is idle.</p></div>
+                <div class="featured-item"><h3 style="color:#d4af37;">🔧 Maintenance</h3><p>Factory-authorized service centers worldwide.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="luxury-footer">
+        <div class="footer-container">
+            <div class="footer-col about-col">
+                <h2 class="footer-logo gold-text">EUPHORIA</h2>
+                <p>The premier global gateway for the world's most coveted assets.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Inventory</h3>
+                <ul>
+                    <li><a href="real-estate.html">Real Estate</a></li>
+                    <li><a href="timepieces.html">Timepieces</a></li>
+                    <li><a href="aircrafts.html">Aircrafts</a></li>
+                    <li><a href="roadsters.html">Exotic Roadsters</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>The Firm</h3>
+                <ul>
+                    <li><a href="index.html#about">Our Story</a></li>
+                    <li><a href="index.html#contact">Concierge</a></li>
+                    <li><a href="#" class="popup-link" data-popup="privacy-policy">Privacy Policy</a></li>
+                    <li><a href="#" class="popup-link" data-popup="terms-of-sale">Terms of Sale</a></li>
+                </ul>
+            </div>
+            <div class="footer-col newsletter-col">
+                <h3>The Private List</h3>
+                <p>Subscribe for exclusive access.</p>
+                <div class="footer-input">
+                    <input type="email" placeholder="Email Address" id="newsletterEmail">
+                    <button type="button" onclick="subscribeNewsletter()">Join</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 EUPHORIA | Dreams Money Can Buy. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ========== POPUP MODAL ========== -->
+    <div id="popupModal" class="popup-modal">
+        <div class="popup-content">
+            <span class="popup-close" id="popupClose">&times;</span>
+            <h3 id="popupTitle"></h3>
+            <div id="popupBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // ========== SLIDESHOW WITH VIDEO FIRST, THEN IMAGES ==========
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const totalSlides = slides.length;
+        let slideshowInterval;
+        
+        // Function to show a specific slide
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+            
+            // Handle video playback
+            const activeSlide = slides[index];
+            const video = activeSlide.querySelector('video');
+            
+            if (video) {
+                // Play the video
+                video.play().catch(e => console.log('Video autoplay prevented:', e));
+            } else {
+                // Pause any video that might be playing
+                const allVideos = document.querySelectorAll('.hero-slide video');
+                allVideos.forEach(vid => {
+                    vid.pause();
+                });
+            }
+        }
+
+        // Function to go to next slide
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            showSlide(currentIndex);
+        }
+
+        // Start the slideshow with video first
+        function startSlideshow() {
+            // Show first slide (video)
+            showSlide(0);
+            
+            // Get video duration
+            const firstVideo = slides[0]?.querySelector('video');
+            let videoDuration = 10000; // Default 10 seconds
+            
+            if (firstVideo) {
+                // When video metadata loads, get its duration
+                firstVideo.addEventListener('loadedmetadata', () => {
+                    videoDuration = Math.min(firstVideo.duration * 1000, 12000); // Max 12 seconds
+                    resetInterval(videoDuration);
+                });
+                
+                // If video ends, move to next slide
+                firstVideo.addEventListener('ended', () => {
+                    if (currentIndex === 0) {
+                        nextSlide();
+                        resetInterval(5000); // Switch to 5-second interval for images
+                    }
+                });
+            }
+            
+            // Set initial interval
+            resetInterval(videoDuration);
+        }
+        
+        function resetInterval(duration) {
+            if (slideshowInterval) clearInterval(slideshowInterval);
+            slideshowInterval = setInterval(() => {
+                // If current slide is video and video is still playing, don't auto-advance yet
+                const currentSlide = slides[currentIndex];
+                const currentVideo = currentSlide?.querySelector('video');
+                
+                if (currentVideo && !currentVideo.ended) {
+                    // Video still playing, wait
+                    return;
+                }
+                nextSlide();
+            }, duration);
+        }
+
+        // Start the slideshow when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            startSlideshow();
+        });
+
+        // Popup content
+        const popupContent = {
+            'privacy-policy': {
+                title: 'Privacy Policy',
+                body: '<p>At EUPHORIA, your privacy is paramount. We employ 256-bit SSL encryption, never share your data with third parties without explicit consent.</p><p style="margin-top:20px"><em>Last updated: May 2026</em></p>'
+            },
+            'terms-of-sale': {
+                title: 'Terms of Sale',
+                body: '<p>All acquisitions through EUPHORIA are governed by our exclusive membership agreement. Assets are sold "as inspected" with authentication guarantees.</p>'
+            },
+            'luxury-blog': {
+                title: 'Luxury Blog',
+                body: '<p>Welcome to the EUPHORIA editorial vault — exclusive insights into haute horology, private aviation, and architectural masterpieces.</p>'
+            },
+            'market-news': {
+                title: 'Market News',
+                body: '<p>Current market intelligence: The luxury asset index rose 7.2% this quarter. Private jet inventory tightened by 15% year-over-year.</p>'
+            }
+        };
+
+        function showPopup(type) {
+            const data = popupContent[type];
+            if (!data) return;
+            document.getElementById('popupTitle').innerText = data.title;
+            document.getElementById('popupBody').innerHTML = data.body;
+            document.getElementById('popupModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePopup() {
+            document.getElementById('popupModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const popupLinks = document.querySelectorAll('.popup-link');
+            popupLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const type = this.getAttribute('data-popup');
+                    if (type && popupContent[type]) showPopup(type);
+                });
+            });
+            const modal = document.getElementById('popupModal');
+            const closeBtn = document.getElementById('popupClose');
+            closeBtn.addEventListener('click', closePopup);
+            modal.addEventListener('click', function(e) { if (e.target === modal) closePopup(); });
+            document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.style.display === 'flex') closePopup(); });
+        });
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const aircraftCards = document.querySelectorAll('.aircraft-card');
+        const resultCountSpan = document.getElementById('resultCount');
+
+        function updateFilter() {
+            const activeFilter = document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'all';
+            let visibleCount = 0;
+            aircraftCards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                if (activeFilter === 'all' || cardCategory === activeFilter) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            if (resultCountSpan) resultCountSpan.textContent = visibleCount;
+        }
+
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateFilter();
+            });
+        });
+
+        // Search
+        const searchInput = document.querySelector('.search-bar input');
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = this.value.toLowerCase();
+                let visibleCount = 0;
+                aircraftCards.forEach(card => {
+                    const title = card.querySelector('.aircraft-title')?.textContent.toLowerCase() || '';
+                    if (title.includes(searchTerm)) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                if (resultCountSpan) resultCountSpan.textContent = visibleCount;
+            });
+        }
+
+        function openInquiry(aircraftName) {
+            alert(`Thank you for your interest in the ${aircraftName}!\n\nOur private aviation concierge will contact you within 24 hours.`);
+        }
+
+        function subscribeNewsletter() {
+            const emailInput = document.getElementById('newsletterEmail');
+            if (emailInput && emailInput.value && emailInput.value.includes('@')) {
+                alert(`Thank you for subscribing!`);
+                emailInput.value = '';
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        }
+
+        // Hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const sideMenu = document.getElementById('sideMenu');
+        const closeMenuBtn = document.getElementById('closeMenu');
+        if (hamburger && sideMenu && closeMenuBtn) {
+            hamburger.addEventListener('click', () => sideMenu.classList.add('open'));
+            closeMenuBtn.addEventListener('click', () => sideMenu.classList.remove('open'));
+            document.addEventListener('click', (e) => {
+                if (sideMenu.classList.contains('open') && !sideMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                    sideMenu.classList.remove('open');
+                }
+            });
+        }
+
+        updateFilter();
+    </script>
+</body>
+</html>

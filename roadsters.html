@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EUPHORIA | Exotic Roadsters Vault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #0b0b0b; color: #ffffff; font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- NAVBAR (identical to other pages) --- */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 80px;
+            background: rgba(11, 11, 11, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            z-index: 1000;
+        }
+        .nav-links { display: flex; list-style: none; gap: 30px; }
+        .nav-links a { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; transition: color 0.3s; }
+        .nav-links a:hover { color: #d4af37; }
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .search-bar { position: relative; }
+        .search-bar input {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 35px 8px 15px; color: #fff; border-radius: 20px;
+        }
+        .search-bar button { position: absolute; right: 10px; background: transparent; border: none; cursor: pointer; color: #fff; }
+        .sign-in-btn { border: 1px solid #d4af37; padding: 8px 20px; transition: all 0.3s; }
+        .sign-in-btn:hover { background: #d4af37; color: #000; }
+
+        /* --- HERO SLIDESHOW (video + images, auto fade) --- */
+        .hero-slideshow {
+            position: relative;
+            width: 100%;
+            height: 85vh;
+            min-height: 550px;
+            overflow: hidden;
+            margin-top: 80px;
+        }
+        .hero-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+        .hero-slide.active { opacity: 1; }
+        .hero-slide video, .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 2;
+        }
+        .hero-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 3;
+            width: 90%;
+            max-width: 800px;
+        }
+        .hero-text h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            color: #d4af37;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .hero-text p {
+            font-size: 1.2rem;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+        .hero-slogan {
+            font-size: 1rem;
+            color: #d4af37;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            .hero-slideshow { height: 60vh; margin-top: 70px; }
+            .hero-text h1 { font-size: 2rem; }
+        }
+
+        /* --- CARDS GRID --- */
+        .inventory-section { padding: 60px 40px; max-width: 1300px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h2 { font-family: 'Cinzel', serif; color: #d4af37; font-size: 2rem; }
+        .section-header .slogan { color: #aaa; font-style: italic; }
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card-img-wrapper { position: relative; height: 220px; overflow: hidden; }
+        .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .card:hover .card-img-wrapper img { transform: scale(1.05); }
+        .card-content { padding: 20px; text-align: center; }
+        .card-content h3 { font-family: 'Cinzel', serif; font-size: 1.3rem; margin-bottom: 5px; }
+        .brand-tag { font-size: 0.75rem; text-transform: uppercase; color: #d4af37; letter-spacing: 2px; display: block; margin-bottom: 8px; }
+        .price { font-size: 1.2rem; color: #d4af37; font-weight: bold; margin: 10px 0; }
+        .card-content p { color: #bbb; font-size: 0.85rem; margin-bottom: 15px; }
+        .view-btn {
+            background: transparent;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            font-weight: 600;
+        }
+        .view-btn:hover { background: #d4af37; color: #000; }
+
+        /* --- MODAL (5 angles) --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(10px);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; z-index: 10000; transition: opacity 0.4s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-wrapper {
+            background: #111; border: 1px solid rgba(212, 175, 55, 0.3);
+            width: 95%; max-width: 1200px; border-radius: 6px;
+            position: relative; overflow: hidden;
+        }
+        .close-modal-btn {
+            position: absolute; top: 15px; right: 20px;
+            background: transparent; border: none; color: #fff;
+            font-size: 2rem; cursor: pointer; z-index: 100;
+        }
+        .close-modal-btn:hover { color: #d4af37; }
+        .modal-two-col { display: grid; grid-template-columns: 1.3fr 1fr; min-height: 600px; }
+        .modal-left-display { background: #000; padding: 35px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(255,255,255,0.05); }
+        .modal-left-display h2 { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #fff; }
+        .modal-left-display .modal-sub-brand { font-size: 0.8rem; text-transform: uppercase; color: #d4af37; margin-bottom: 20px; }
+        .spotlight-stage { position: relative; background: radial-gradient(circle, #1a1a1a 0%, #000 80%); width: 100%; height: 340px; display: flex; align-items: center; justify-content: center; border-radius: 6px; overflow: hidden; }
+        .spotlight-stage img { max-width: 95%; max-height: 85%; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.85)); }
+        .angle-view-tag { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.8); border-left: 2px solid #d4af37; color: #d4af37; padding: 4px 12px; font-size: 0.7rem; text-transform: uppercase; font-weight: 600; }
+        .camera-tray { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 15px; }
+        .camera-feed { background: #111; border: 1px solid rgba(255,255,255,0.08); height: 55px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: #888; font-size: 0.65rem; text-transform: uppercase; gap: 4px; transition: 0.2s; }
+        .camera-feed i { font-size: 0.9rem; }
+        .camera-feed:hover, .camera-feed.active { border-color: #d4af37; color: #d4af37; background: #161616; }
+        .modal-right-ledger { background: #151515; padding: 35px; display: flex; flex-direction: column; justify-content: space-between; }
+        .ledger-table { width: 100%; }
+        .ledger-row { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .ledger-label { font-size: 0.8rem; color: #8c8c8c; display: flex; align-items: center; gap: 10px; }
+        .ledger-label i { width: 16px; color: #d4af37; }
+        .ledger-value { font-size: 0.85rem; color: #fff; font-weight: 600; text-transform: uppercase; }
+        .modal-action-row { display: flex; gap: 15px; margin-top: 25px; }
+        .modal-action-btn { flex: 1; text-align: center; padding: 12px; font-size: 0.8rem; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .modal-inquire-btn { background: #d4af37; color: #000; border: 1px solid #d4af37; }
+        .modal-inquire-btn:hover { background: #fff; }
+        .modal-youtube-btn { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .modal-youtube-btn:hover { border-color: #ff0000; color: #ff3333; }
+
+        /* --- CONTACT & FOOTER --- */
+        .contact-section { padding: 80px 40px; background: #0e0e0e; border-top: 1px solid rgba(255,255,255,0.03); }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 50px; max-width: 1100px; margin: 0 auto; }
+        .info-block { margin-bottom: 30px; }
+        .info-block h3 { font-family: 'Cinzel', serif; color: #d4af37; margin-bottom: 10px; }
+        .info-block p { color: #a0a0a0; font-size: 0.9rem; }
+        .luxury-form { display: flex; flex-direction: column; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-size: 0.75rem; text-transform: uppercase; color: #d4af37; letter-spacing: 1px; }
+        .form-group input, .form-group select, .form-group textarea { background: #151515; border: 1px solid rgba(255,255,255,0.08); padding: 12px; color: #fff; }
+        .gold-submit-btn { background: #d4af37; color: #000; border: none; padding: 14px; font-weight: 600; text-transform: uppercase; cursor: pointer; }
+        .gold-submit-btn:hover { background: #fff; }
+        .luxury-footer { background: #070707; padding: 60px 40px 20px; border-top: 1px solid rgba(255,255,255,0.02); }
+        .footer-container { display: grid; grid-template-columns: 1.5fr repeat(2, 1fr); gap: 40px; max-width: 1200px; margin: 0 auto 40px; }
+        .footer-col h3 { font-family: 'Cinzel', serif; color: #fff; font-size: 1rem; margin-bottom: 20px; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 8px; }
+        .footer-col ul a { color: #a0a0a0; font-size: 0.85rem; cursor: pointer; }
+        .footer-col ul a:hover { color: #d4af37; }
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-links a { color: #a0a0a0; font-size: 1.2rem; }
+        .social-links a:hover { color: #d4af37; }
+        .footer-input { display: flex; margin-top: 15px; }
+        .footer-input input { flex: 1; background: #151515; border: 1px solid rgba(255,255,255,0.1); padding: 10px; color: #fff; }
+        .footer-input button { background: #d4af37; border: none; padding: 0 20px; color: #000; font-weight: bold; cursor: pointer; }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.8rem; color: #555; }
+        @media (max-width: 768px) {
+            .contact-grid, .footer-container { grid-template-columns: 1fr; }
+            .modal-two-col { grid-template-columns: 1fr; }
+            .camera-tray { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html"><div style="font-family:'Cinzel', serif; font-weight:700; font-size:1.4rem; color:#d4af37;">EUPHORIA</div></a>
+        </div>
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="real-estate.html">Real Estate</a></li>
+                <li><a href="timepieces.html">Timepieces</a></li>
+                <li><a href="aircrafts.html">Aircrafts</a></li>
+                <li><a href="roadsters.html" style="color:#d4af37;">Exotic Roadsters</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="search-bar"><input type="text" placeholder="Search Hypercars..."><button>🔍</button></div>
+            <a href="#" class="sign-in-btn">Sign In</a>
+        </div>
+    </nav>
+
+    <!-- HERO SLIDESHOW: 1 video + 4 images (internet) -->
+    <div class="hero-slideshow" id="heroSlideshow">
+        <div class="hero-slide active">
+            <video autoplay muted loop playsinline>
+                <source src="images/roadsters/vid1.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="hero-slide"><img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1600&q=80" alt="Supercar 1"></div>
+        <div class="hero-slide"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80" alt="Supercar 2"></div>
+        <div class="hero-slide"><img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1600&q=80" alt="Supercar 3"></div>
+        <div class="hero-slide"><img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1600&q=80" alt="Supercar 4"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-text">
+            <h1>EXOTIC ROADSTERS</h1>
+            <p>High-performance legal track weapons & limited series collectors assets</p>
+            <div class="hero-slogan">— Engineered for the Extraordinary —</div>
+        </div>
+    </div>
+
+    <!-- 6 CARDS -->
+    <section class="inventory-section">
+        <div class="section-header">
+            <h2>The Hypercar Vault</h2>
+            <p class="slogan">Ultra-rare specifications, delivered worldwide.</p>
+        </div>
+        <div class="card-container">
+            <!-- Card 1: Maybach GLS 600 -->
+            <div class="card">
+                <div class="card-img-wrapper"><img src="images/roadsters/maybach.png" alt="Maybach GLS 600"></div>
+                <div class="card-content">
+                    <span class="brand-tag">Maybach</span>
+                    <h3>GLS 600</h3>
+                    <div class="price">$225,000</div>
+                    <p>4.0L V8 biturbo, 550 hp, luxury SUV redefined.</p>
+                    <button class="view-btn" onclick="openVehicleModal(1)">Inspect Chassis</button>
+                </div>
+            </div>
+            <!-- Card 2: Mercedes Brabus -->
+            <div class="card">
+                <div class="card-img-wrapper"><img src="images/roadsters/maybach.jpg" alt="Mercedes Brabus"></div>
+                <div class="card-content">
+                    <span class="brand-tag">Brabus</span>
+                    <h3>900 Rocket Edition</h3>
+                    <div class="price">$450,000</div>
+                    <p>4.5L V8 biturbo, 900 hp, 0-100 in 2.8s.</p>
+                    <button class="view-btn" onclick="openVehicleModal(2)">Inspect Chassis</button>
+                </div>
+            </div>
+            <!-- Card 3: Lamborghini Aventador SVJ -->
+            <div class="card">
+                <div class="card-img-wrapper"><img src="images/roadsters/lambo.png" alt="Lamborghini Aventador SVJ"></div>
+                <div class="card-content">
+                    <span class="brand-tag">Lamborghini</span>
+                    <h3>Aventador SVJ</h3>
+                    <div class="price">$573,000</div>
+                    <p>6.5L V12, 759 hp, ALA 2.0 active aero.</p>
+                    <button class="view-btn" onclick="openVehicleModal(3)">Inspect Chassis</button>
+                </div>
+            </div>
+            <!-- Card 4: Rolls-Royce Cullinan -->
+            <div class="card">
+                <div class="card-img-wrapper"><img src="images/roadsters/rolls.png" alt="Rolls-Royce Cullinan"></div>
+                <div class="card-content">
+                    <span class="brand-tag">Rolls-Royce</span>
+                    <h3>Cullinan Black Badge</h3>
+                    <div class="price">$420,000</div>
+                    <p>6.75L V12, 600 hp, magic carpet ride.</p>
+                    <button class="view-btn" onclick="openVehicleModal(4)">Inspect Chassis</button>
+                </div>
+            </div>
+            <!-- Card 5: Porsche 918 Spyder (extra) -->
+            <div class="card">
+                <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=80" alt="Porsche 918 Spyder"></div>
+                <div class="card-content">
+                    <span class="brand-tag">Porsche</span>
+                    <h3>918 Spyder</h3>
+                    <div class="price">$1,450,000</div>
+                    <p>4.6L V8 hybrid, 887 hp, 0-100 in 2.5s.</p>
+                    <button class="view-btn" onclick="openVehicleModal(5)">Inspect Chassis</button>
+                </div>
+            </div>
+            <!-- Card 6: Ferrari SF90 Stradale (extra) -->
+            <div class="card">
+                <div class="card-img-wrapper"><img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=80" alt="Ferrari SF90"></div>
+                <div class="card-content">
+                    <span class="brand-tag">Ferrari</span>
+                    <h3>SF90 Stradale</h3>
+                    <div class="price">$524,000</div>
+                    <p>4.0L V8 hybrid, 986 hp, AWD, 0-100 in 2.5s.</p>
+                    <button class="view-btn" onclick="openVehicleModal(6)">Inspect Chassis</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="vehicleModal" onclick="closeVehicleModal(event)">
+        <div class="modal-wrapper">
+            <button class="close-modal-btn" onclick="forceCloseModal()">&times;</button>
+            <div class="modal-two-col">
+                <div class="modal-left-display">
+                    <div>
+                        <h2 id="modalVehicleTitle">Vehicle Title</h2>
+                        <div class="modal-sub-brand" id="modalVehicleBrand">Brand</div>
+                    </div>
+                    <div class="spotlight-stage">
+                        <span class="angle-view-tag" id="activeAngleTag">Front View</span>
+                        <img id="modalVehicleImg" src="" alt="Vehicle view">
+                    </div>
+                    <div class="camera-tray">
+                        <div class="camera-feed active" onclick="switchCameraAngle('front')"><i class="fa-solid fa-car"></i><span>Front</span></div>
+                        <div class="camera-feed" onclick="switchCameraAngle('side')"><i class="fa-solid fa-arrows-left-right"></i><span>Side</span></div>
+                        <div class="camera-feed" onclick="switchCameraAngle('rear')"><i class="fa-solid fa-square-caret-up"></i><span>Rear</span></div>
+                        <div class="camera-feed" onclick="switchCameraAngle('interior')"><i class="fa-solid fa-gauge-high"></i><span>Interior</span></div>
+                        <div class="camera-feed" onclick="switchCameraAngle('engine')"><i class="fa-solid fa-microchip"></i><span>Engine</span></div>
+                    </div>
+                </div>
+                <div class="modal-right-ledger">
+                    <div class="ledger-table">
+                        <div class="ledger-row"><span class="ledger-label"><i class="fa-solid fa-calendar-days"></i> Year</span><span class="ledger-value" id="specYear">—</span></div>
+                        <div class="ledger-row"><span class="ledger-label"><i class="fa-solid fa-gauge"></i> Kilometers</span><span class="ledger-value" id="specKms">—</span></div>
+                        <div class="ledger-row"><span class="ledger-label"><i class="fa-solid fa-gears"></i> Transmission</span><span class="ledger-value" id="specTrans">—</span></div>
+                        <div class="ledger-row"><span class="ledger-label"><i class="fa-solid fa-paint-roller"></i> Exterior Color</span><span class="ledger-value" id="specExtColor">—</span></div>
+                        <div class="ledger-row"><span class="ledger-label"><i class="fa-solid fa-couch"></i> Interior Color</span><span class="ledger-value" id="specIntColor">—</span></div>
+                        <div class="ledger-row"><span class="ledger-label"><i class="fa-solid fa-bolt"></i> Horsepower</span><span class="ledger-value" id="specHp">—</span></div>
+                        <div class="ledger-row"><span class="ledger-label"><i class="fa-solid fa-car-burst"></i> Engine Size</span><span class="ledger-value" id="specEngine">—</span></div>
+                        <div class="ledger-row"><span class="ledger-label"><i class="fa-solid fa-globe"></i> Specs</span><span class="ledger-value" id="specRegional">—</span></div>
+                        <div class="ledger-row"><span class="ledger-label"><i class="fa-solid fa-shield-halved"></i> Warranty</span><span class="ledger-value" id="specWarranty">—</span></div>
+                    </div>
+                    <div class="modal-action-row">
+                        <a href="#contact" class="modal-action-btn modal-inquire-btn" onclick="forceCloseModal()">Request Allocation</a>
+                        <a id="modalActionYoutube" href="#" target="_blank" class="modal-action-btn modal-youtube-btn"><i class="fa-brands fa-youtube"></i> Track Review</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="contact-section">
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="info-block"><h3>Global HQ Concierge</h3><p>Francistown, Botswana</p><p>Digital Corporate Center, Complex 4</p></div>
+                <div class="info-block"><h3>Direct Acquisition Vault Lines</h3><p>Private Office: +267 71 000 000</p><p>Secure Mail: executive@euphoria.bw</p></div>
+            </div>
+            <div class="contact-form-wrapper">
+                <form class="luxury-form" onsubmit="event.preventDefault(); alert('Allocation inquiry logged securely. Your portfolio manager will connect shortly.');">
+                    <div class="form-group"><label>Identity / Full Name</label><input type="text" placeholder="Your Name" required></div>
+                    <div class="form-group"><label>Secure Communication Email</label><input type="email" placeholder="client@domain.com" required></div>
+                    <div class="form-group"><label>Target Roadster Asset</label><input type="text" id="targetAsset" placeholder="Select a car above..."></div>
+                    <div class="form-group"><label>Custom Acquisition Notes</label><textarea rows="4" placeholder="Specify customization, delivery preferences..."></textarea></div>
+                    <button type="submit" class="gold-submit-btn">Transmit Acquisition Request</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="luxury-footer">
+        <div class="footer-container">
+            <div class="footer-col"><h2 style="font-size:1.4rem; color:#d4af37;">EUPHORIA</h2><p style="color:#777;">Gateway to the world's most premium private assets.</p></div>
+            <div class="footer-col"><h3>Asset Vaults</h3><ul><li><a href="real-estate.html">Real Estate</a></li><li><a href="timepieces.html">Timepieces</a></li><li><a href="aircrafts.html">Aircrafts</a></li><li><a href="roadsters.html">Exotic Roadsters</a></li></ul></div>
+            <div class="footer-col"><h3>The Desk</h3><ul><li><a href="#contact">Concierge Desk</a></li><li><a href="#">Security Protocols</a></li></ul></div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2026 EUPHORIA | Absolute Vault Asset Architecture. All Rights Reserved.</p></div>
+    </footer>
+
+    <script>
+        // AUTO HERO SLIDESHOW (video + 4 images, loop)
+        let heroIndex = 0;
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        if(heroSlides.length) {
+            setInterval(() => {
+                heroSlides[heroIndex].classList.remove('active');
+                heroIndex = (heroIndex + 1) % heroSlides.length;
+                heroSlides[heroIndex].classList.add('active');
+            }, 5500);
+        }
+
+        // CAR DATABASE (6 cars)
+        // For cars 1-4 we use LOCAL images; for 5-6 we use Unsplash fallbacks.
+        const roadsterDatabase = {
+            1: {
+                brand: "Maybach", title: "GLS 600",
+                front: "images/roadsters/front1.png",
+                side: "images/roadsters/side1.png",
+                rear: "images/roadsters/rear1.jpg",
+                interior: "images/roadsters/int1.jpg",
+              
+                year: "2024", kms: "150 km", transmission: "9G-TRONIC Auto",
+                extColor: "Diamond White", intColor: "Crystal Silver / Black",
+                hp: "550 HP", engineSize: "4.0L V8 Biturbo", specs: "GCC Spec", warranty: "5 Years",
+                youtube: "https://www.youtube.com/watch?v=example1"
+            },
+            2: {
+                brand: "Brabus", title: "900 Rocket Edition",
+                front: "images/roadsters/car2.png",
+                side: "images/roadsters/side2.jpg",
+                rear: "images/roadsters/rear2.jpg",
+                interior: "images/roadsters/int2.jpg",
+                year: "2023", kms: "800 km", transmission: "9-Speed Auto",
+                extColor: "Monoblock Grey", intColor: "Black Leather / Red Stitching",
+                hp: "900 HP", engineSize: "4.5L V8 Biturbo", specs: "European", warranty: "4 Years",
+                youtube: "https://www.youtube.com/watch?v=example2"
+            },
+            3: {
+                brand: "Lamborghini", title: "Aventador SVJ",
+                front: "images/roadsters/front3.png",
+                side: "images/roadsters/side.png",
+                rear: "images/roadsters/rear3.jpg",
+                interior: "images/roadsters/int4.jpg",
+                year: "2021", kms: "3,200 km", transmission: "7-Speed ISR",
+                extColor: "Verde Alceo Green", intColor: "Black Alcantara / Green Accents",
+                hp: "759 HP", engineSize: "6.5L V12", specs: "US Spec", warranty: "Remaining Factory",
+                youtube: "https://www.youtube.com/watch?v=example3"
+            },
+            4: {
+                brand: "Rolls-Royce", title: "Cullinan Black Badge",
+                front: "images/roadsters/car4.png",
+                side: "images/roadsters/side4.png",
+                rear: "images/roadsters/rear4.png",
+                interior: "images/roadsters/int3.jpg",
+                year: "2024", kms: "50 km", transmission: "8-Speed Auto",
+                extColor: "Black Diamond", intColor: "Arctic White / Orange",
+                hp: "600 HP", engineSize: "6.75L V12 Twin-Turbo", specs: "GCC Spec", warranty: "4 Years Unlimited",
+                youtube: "https://www.youtube.com/watch?v=example4"
+            },
+            5: {
+                brand: "Porsche", title: "918 Spyder",
+                front: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1000&q=80",
+                side: "https://tse3.mm.bing.net/th/id/OIP.BCejRtTtHUBIx5sdLwOm0wHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
+                rear: "https://tse2.mm.bing.net/th/id/OIP.z22OOoQ30cv-uSj6vw4Z5AHaD2?rs=1&pid=ImgDetMain&o=7&rm=3",
+                interior: "https://images6.alphacoders.com/572/572282.jpg",
+                year: "2015", kms: "4,500 km", transmission: "7-Speed PDK",
+                extColor: "Liquid Metal Silver", intColor: "Black / Acid Green",
+                hp: "887 HP", engineSize: "4.6L V8 Hybrid", specs: "European", warranty: "None (Certified)",
+                youtube: "https://www.youtube.com/watch?v=s3z8bK_D35I"
+            },
+            6: {
+                brand: "Ferrari", title: "SF90 Stradale",
+                front: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1000&q=80",
+                side: "https://tse4.mm.bing.net/th/id/OIP.XTsurWG99vwUwG70r4dqsQHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
+                rear: "https://tse2.mm.bing.net/th/id/OIP.9ouY5Owkqyzfb5-kMgQrsQHaFj?rs=1&pid=ImgDetMain&o=7&rm=3",
+                interior: "https://tse1.mm.bing.net/th/id/OIP.Kexy_ZCylDV3kf1jf5NPhQHaFj?rs=1&pid=ImgDetMain&o=7&rm=3",
+                year: "2023", kms: "1,200 km", transmission: "8-Speed DCT",
+                extColor: "Rosso Corsa", intColor: "Black / Red Alcantara",
+                hp: "986 HP", engineSize: "4.0L V8 Hybrid", specs: "US Spec", warranty: "3 Years",
+                youtube: "https://www.youtube.com/watch?v=7M738Y_V1_M"
+            }
+        };
+
+        let currentActiveId = null;
+        const modal = document.getElementById('vehicleModal');
+        const mainImg = document.getElementById('modalVehicleImg');
+        const angleTag = document.getElementById('activeAngleTag');
+
+        function openVehicleModal(id) {
+            currentActiveId = id;
+            const data = roadsterDatabase[id];
+            if(!data) return;
+            document.getElementById('modalVehicleTitle').innerText = data.title;
+            document.getElementById('modalVehicleBrand').innerText = data.brand;
+            document.getElementById('specYear').innerText = data.year;
+            document.getElementById('specKms').innerText = data.kms;
+            document.getElementById('specTrans').innerText = data.transmission;
+            document.getElementById('specExtColor').innerText = data.extColor;
+            document.getElementById('specIntColor').innerText = data.intColor;
+            document.getElementById('specHp').innerText = data.hp;
+            document.getElementById('specEngine').innerText = data.engineSize;
+            document.getElementById('specRegional').innerText = data.specs;
+            document.getElementById('specWarranty').innerText = data.warranty;
+            document.getElementById('modalActionYoutube').href = data.youtube;
+            setConciergeAsset(`${data.brand} ${data.title}`);
+            switchCameraAngle('front');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function switchCameraAngle(angleKey) {
+            const data = roadsterDatabase[currentActiveId];
+            if(!data) return;
+            let label = "";
+            let imgSrc = "";
+            switch(angleKey) {
+                case 'front': label = "Front View"; imgSrc = data.front; break;
+                case 'side': label = "Side Profile"; imgSrc = data.side; break;
+                case 'rear': label = "Rear View"; imgSrc = data.rear; break;
+                case 'interior': label = "Interior Cockpit"; imgSrc = data.interior; break;
+                case 'engine': label = "Engine Bay"; imgSrc = data.engine; break;
+            }
+            angleTag.innerText = label;
+            mainImg.src = imgSrc;
+            document.querySelectorAll('.camera-feed').forEach(feed => feed.classList.remove('active'));
+            const activeFeed = Array.from(document.querySelectorAll('.camera-feed')).find(feed => feed.innerText.toLowerCase().includes(angleKey));
+            if(activeFeed) activeFeed.classList.add('active');
+        }
+
+        function forceCloseModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        function closeVehicleModal(event) {
+            if (event.target === modal) forceCloseModal();
+        }
+        function setConciergeAsset(assetName) {
+            const input = document.getElementById('targetAsset');
+            if(input) input.value = assetName;
+        }
+
+        // Simple consent banner logic (optional, but kept)
+        document.addEventListener("DOMContentLoaded", function() {
+            if(!localStorage.getItem("euphoriaVaultConsent")) {
+                const banner = document.createElement('div');
+                banner.className = 'consent-footer-banner';
+                banner.innerHTML = `<div class="consent-content"><p>We use encrypted tracking cookies to enhance your private catalog session.</p><div class="consent-buttons"><button class="consent-btn accept-btn" onclick="localStorage.setItem('euphoriaVaultConsent','accepted'); this.parentElement.parentElement.parentElement.style.display='none';">Accept</button><button class="consent-btn decline-btn" onclick="localStorage.setItem('euphoriaVaultConsent','declined'); this.parentElement.parentElement.parentElement.style.display='none';">Decline</button></div></div>`;
+                banner.style.cssText = "position:fixed; bottom:0; left:0; width:100%; background:#111; border-top:2px solid #d4af37; padding:20px 40px; z-index:9999; display:flex; justify-content:center;";
+                document.body.appendChild(banner);
+            }
+        });
+    </script>
+    <style>
+        .consent-footer-banner { display: flex; align-items: center; justify-content: center; }
+        .consent-content { max-width: 1200px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .consent-btn { padding: 8px 22px; font-weight: 600; text-transform: uppercase; cursor: pointer; }
+        .accept-btn { background: #d4af37; border: none; color: #000; }
+        .decline-btn { background: transparent; border: 1px solid #fff; color: #fff; }
+    </style>
+</body>
+</html>
